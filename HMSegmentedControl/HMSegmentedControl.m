@@ -320,7 +320,19 @@
             titleLayer.frame = rect;
             titleLayer.alignmentMode = kCAAlignmentCenter;
             titleLayer.truncationMode = kCATruncationEnd;
-            titleLayer.string = [self attributedTitleAtIndex:idx];
+            if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
+                titleLayer.string = [self attributedTitleAtIndex:idx];
+            }else{
+                NSAttributedString *str = [self attributedTitleAtIndex:idx];
+                titleLayer.string = str.string;
+                [str enumerateAttributesInRange:NSMakeRange(0, str.length) options:(0) usingBlock:^(NSDictionary *attrs, NSRange range, BOOL *stop) {
+                    UIFont *font = attrs[NSFontAttributeName];
+                    UIColor *color = attrs[NSForegroundColorAttributeName];
+                    [titleLayer setFont:(__bridge CFTypeRef)(font.fontName)];
+                    [titleLayer setFontSize:font.pointSize];
+                    [titleLayer setForegroundColor:color.CGColor];
+                }];
+            }
             titleLayer.contentsScale = [[UIScreen mainScreen] scale];
             
             [self.scrollView.layer addSublayer:titleLayer];
@@ -417,7 +429,19 @@
             CATextLayer *titleLayer = [CATextLayer layer];
             titleLayer.frame = textRect;
             titleLayer.alignmentMode = kCAAlignmentCenter;
-            titleLayer.string = [self attributedTitleAtIndex:idx];
+            if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
+                titleLayer.string = [self attributedTitleAtIndex:idx];
+            }else{
+                NSAttributedString *str = [self attributedTitleAtIndex:idx];
+                titleLayer.string = str.string;
+                [str enumerateAttributesInRange:NSMakeRange(0, str.length) options:(0) usingBlock:^(NSDictionary *attrs, NSRange range, BOOL *stop) {
+                    UIFont *font = attrs[NSFontAttributeName];
+                    UIColor *color = attrs[NSForegroundColorAttributeName];
+                    [titleLayer setFont:(__bridge CFTypeRef)(font.fontName)];
+                    [titleLayer setFontSize:font.pointSize];
+                    [titleLayer setForegroundColor:color.CGColor];
+                }];
+            }
             titleLayer.truncationMode = kCATruncationEnd;
 			
             CALayer *imageLayer = [CALayer layer];
